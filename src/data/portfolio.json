@@ -1,0 +1,179 @@
+{
+  "profile": {
+    "name": "Emile Izere",
+    "title": "CS & Economics @ Yale",
+    "tagline": "Building at the intersection of code, markets, and data",
+    "bio": "I explore ideas across Computer Science, Economics, and Data Science. Each discipline teaches me something different about how systems work — whether they're distributed networks, financial markets, or statistical models.",
+    "email": "emile.izere@yale.edu",
+    "linkedin": "https://linkedin.com/in/emile-izere-886432267",
+    "github": "https://github.com/Izemi",
+    "location": "New Haven, CT"
+  },
+  "rooms": {
+    "cs": {
+      "name": "Computer Science",
+      "color": "cs",
+      "tagline": "Building systems that scale",
+      "projects": [
+        {
+          "title": "Distributed Rate Limiter",
+          "shortDesc": "Redis-powered rate limiting handling 1,000+ req/s with sub-10ms latency",
+          "fullDesc": "A production-grade distributed rate limiting system designed to handle high-throughput API traffic across multiple server instances. The system uses Redis for atomic operations and implements the sliding window algorithm to ensure accurate rate limiting even under heavy load.",
+          "highlights": [
+            "Handles 1,000+ concurrent requests per second across multiple Node.js instances",
+            "Achieves sub-10ms p99 latency using Redis atomic operations (MULTI/EXEC)",
+            "Implements 3-tier API authentication with different rate limits per tier",
+            "Sliding window algorithm prevents burst traffic from bypassing limits",
+            "Includes comprehensive monitoring with Prometheus metrics",
+            "99.9% uptime with automatic failover and graceful degradation"
+          ],
+          "techStack": ["Node.js", "Express", "Redis", "Docker", "Prometheus"],
+          "tags": ["Node.js", "Redis", "Docker"],
+          "github": "https://github.com/Izemi",
+          "codeSnippet": "// Sliding window rate limiter\nasync function checkRateLimit(userId, limit, window) {\n  const now = Date.now();\n  const key = `ratelimit:${userId}`;\n  \n  const multi = redis.multi();\n  multi.zremrangebyscore(key, 0, now - window);\n  multi.zadd(key, now, `${now}-${Math.random()}`);\n  multi.zcard(key);\n  multi.expire(key, Math.ceil(window / 1000));\n  \n  const results = await multi.exec();\n  const count = results[2][1];\n  \n  return { allowed: count <= limit, remaining: Math.max(0, limit - count) };\n}"
+        },
+        {
+          "title": "InternTrack",
+          "shortDesc": "Full-stack app for tracking 100+ internship applications with automated alerts",
+          "fullDesc": "A comprehensive internship application tracking system built to help students manage their job search effectively. Features a clean dashboard for tracking application status, automated email reminders for follow-ups, and analytics to identify patterns in your job search.",
+          "highlights": [
+            "Track 100+ applications with status updates and notes",
+            "Automated email notifications for follow-up reminders",
+            "Interactive analytics dashboard showing application funnel",
+            "JWT authentication with secure session management",
+            "RESTful API design with comprehensive documentation",
+            "Deployed on Vercel with 99.9% uptime"
+          ],
+          "techStack": ["React", "Node.js", "PostgreSQL", "Tailwind", "JWT", "Vercel"],
+          "tags": ["React", "PostgreSQL", "Node.js"],
+          "github": "https://github.com/Izemi",
+          "codeSnippet": "// Application status update with notification\nasync function updateApplicationStatus(appId, newStatus) {\n  const app = await db.application.update({\n    where: { id: appId },\n    data: { \n      status: newStatus,\n      updatedAt: new Date()\n    },\n    include: { user: true, company: true }\n  });\n  \n  if (newStatus === 'INTERVIEW') {\n    await sendNotification(app.user.email, {\n      type: 'INTERVIEW_SCHEDULED',\n      company: app.company.name\n    });\n  }\n  \n  return app;\n}"
+        }
+      ],
+      "readings": [
+        {
+          "title": "Designing Data-Intensive Applications",
+          "author": "Martin Kleppmann",
+          "type": "book",
+          "note": "The bible for distributed systems. Changed how I think about data."
+        },
+        {
+          "title": "The Bitter Lesson",
+          "author": "Rich Sutton",
+          "type": "essay",
+          "note": "Why general methods + compute beat hand-crafted solutions."
+        }
+      ],
+      "know": ["Python", "JavaScript", "TypeScript", "Java", "C", "React", "Node.js", "Express", "PostgreSQL", "Redis", "Docker", "Git", "Linux", "REST APIs"],
+      "learning": ["Rust", "Go", "Kubernetes", "System Design", "Distributed Consensus"]
+    },
+    "economics": {
+      "name": "Economics",
+      "color": "econ",
+      "tagline": "Understanding markets and incentives",
+      "projects": [
+        {
+          "title": "Policy Data Pipeline",
+          "shortDesc": "Built data pipelines at Vanguard Economics, cutting insight turnaround from days to minutes",
+          "fullDesc": "Developed an end-to-end data pipeline for processing national economic statistics and generating policy insights. The system automated data ingestion from multiple government sources, performed cleaning and transformation, and powered real-time visualization dashboards used by policy analysts.",
+          "highlights": [
+            "Automated ingestion from 5+ government data sources (World Bank, IMF, national statistics)",
+            "Reduced policy insight turnaround from 3 days to under 30 minutes",
+            "Built interactive React dashboards with drill-down capabilities",
+            "Implemented data validation checks catching 95% of data quality issues",
+            "PostgreSQL database with optimized queries for time-series analysis",
+            "Used by 10+ policy analysts for daily decision-making"
+          ],
+          "techStack": ["PostgreSQL", "React", "Python", "Pandas", "D3.js"],
+          "tags": ["PostgreSQL", "React", "Data Viz"],
+          "github": null,
+          "codeSnippet": "# Data pipeline for economic indicators\ndef process_economic_data(source, indicators):\n    raw_data = fetch_from_source(source)\n    \n    cleaned = (\n        raw_data\n        .pipe(validate_schema)\n        .pipe(handle_missing_values)\n        .pipe(normalize_currencies)\n        .pipe(calculate_growth_rates)\n    )\n    \n    for indicator in indicators:\n        upsert_to_db(\n            table='economic_indicators',\n            data=cleaned[indicator],\n            conflict_key=['country', 'date', 'indicator']\n        )\n    \n    return generate_summary_stats(cleaned)"
+        }
+      ],
+      "readings": [
+        {
+          "title": "Thinking, Fast and Slow",
+          "author": "Daniel Kahneman",
+          "type": "book",
+          "note": "Behavioral economics masterpiece. System 1 vs System 2 thinking."
+        },
+        {
+          "title": "The Armchair Economist",
+          "author": "Steven Landsburg",
+          "type": "book",
+          "note": "Economics applied to everyday decisions. Surprisingly fun."
+        },
+        {
+          "title": "Mechanism Design for Social Good",
+          "author": "MD4SG",
+          "type": "papers",
+          "note": "Game theory meets real-world impact."
+        }
+      ],
+      "know": ["Microeconomics", "Macroeconomics", "Game Theory", "Econometrics", "Market Design", "Behavioral Economics"],
+      "learning": ["Auction Theory", "Mechanism Design", "Development Economics", "Financial Markets"]
+    },
+    "data": {
+      "name": "Data Science",
+      "color": "data",
+      "tagline": "Finding patterns in chaos",
+      "projects": [
+        {
+          "title": "Analytics Dashboard",
+          "shortDesc": "Interactive visualizations for internship tracking with trend analysis",
+          "fullDesc": "Built a comprehensive analytics module for InternTrack that helps students understand their job search patterns. Features include application funnel visualization, response rate analysis by company size and industry, and predictive insights on optimal application timing.",
+          "highlights": [
+            "Funnel visualization showing conversion rates at each stage",
+            "Response rate analysis segmented by company size, industry, and role",
+            "Time-series analysis identifying optimal days/times to apply",
+            "A/B testing framework for resume and cover letter variations",
+            "Statistical significance testing for all insights",
+            "Export functionality for sharing with career counselors"
+          ],
+          "techStack": ["React", "Recharts", "Pandas", "NumPy", "Statistical Analysis"],
+          "tags": ["Recharts", "Pandas", "Statistics"],
+          "github": "https://github.com/Izemi",
+          "codeSnippet": "# Response rate analysis by company attributes\ndef analyze_response_rates(applications_df):\n    response_rates = (\n        applications_df\n        .groupby(['company_size', 'industry'])\n        .agg(\n            total=('id', 'count'),\n            responses=('responded', 'sum'),\n            interviews=('interview', 'sum')\n        )\n        .assign(\n            response_rate=lambda x: x.responses / x.total,\n            interview_rate=lambda x: x.interviews / x.responses,\n            ci_lower=lambda x: proportion_confint(x.responses, x.total)[0],\n            ci_upper=lambda x: proportion_confint(x.responses, x.total)[1]\n        )\n    )\n    \n    return response_rates.sort_values('response_rate', ascending=False)"
+        }
+      ],
+      "readings": [
+        {
+          "title": "The Signal and the Noise",
+          "author": "Nate Silver",
+          "type": "book",
+          "note": "Why most predictions fail — and some don't."
+        },
+        {
+          "title": "Statistical Rethinking",
+          "author": "Richard McElreath",
+          "type": "book",
+          "note": "Bayesian approach to statistics. Mind-expanding."
+        }
+      ],
+      "know": ["Python", "Pandas", "NumPy", "SQL", "R", "Jupyter", "Data Visualization", "Statistical Analysis", "Hypothesis Testing"],
+      "learning": ["Machine Learning", "Deep Learning", "Causal Inference", "A/B Testing", "MLOps"]
+    }
+  },
+  "about": {
+    "education": {
+      "school": "Yale University",
+      "degree": "B.S. in Computer Science & Economics",
+      "certificate": "Certificate in Data Science",
+      "period": "Class of 2027"
+    },
+    "awards": [
+      "Vice-President, Agahozo-Shalom Youth Village Student Government",
+      "Class Valedictorian",
+      "Ranked 3rd — Global CMU Python Coding Competition (2019)"
+    ],
+    "communities": ["Yale Hackathon", "ColorStack", "CodePath", "AI4ALL", "CPI", "ISOMO Academy", "Yale Effective Altruism"],
+    "life": [
+      { "name": "Soccer", "category": "Sports" },
+      { "name": "Driving", "category": "Skills" },
+      { "name": "Chess", "category": "Games" },
+      { "name": "English", "category": "Languages" },
+      { "name": "French", "category": "Languages" },
+      { "name": "Kinyarwanda", "category": "Languages" }
+    ]
+  }
+}
