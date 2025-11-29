@@ -28,6 +28,4 @@ Edit `src/data/portfolio.json` or use the admin panel at `/admin` (password: `ad
 - Framer Motion
 - TypeScript
 
-## Deploy
 
-Push to GitHub, then import to [Vercel](https://vercel.com) for instant deployment.
